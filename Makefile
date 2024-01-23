@@ -6,7 +6,9 @@ OBJDUMP=${CHERIOT_LLVM_ROOT}/llvm-objdump
 
 # Create
 cpu0_irom.vhx: boot.elf Makefile
-	${OBJCOPY} -O binary boot.elf - | hexdump -v -e '"%08X" "\n"' > cpu0_irom.vhx
+	${OBJCOPY} -O binary boot.elf boot.bin
+	hexdump -v -e '"%08X" "\n"' boot.bin > cpu0_irom.vhx
+	srec_cat boot.bin -binary -offset 0x0000 -byte-swap 4 -o cpu0_irom.vmem -vmem
 
 boot.elf: boot.S.o boot.cc.o irom.ldscript Makefile
 	$(LD) --script=irom.ldscript --relax -o boot.elf boot.cc.o boot.S.o
@@ -20,4 +22,4 @@ boot.S.o: boot.S
 
 
 clean:
-	rm -f boot.elf boot.S.o boot.cc.o cpu0_irom.vhx boot.dump
+	rm -f boot.elf boot.S.o boot.cc.o cpu0_irom.vhx boot.dump boot.bin cpu0_irom.vmem

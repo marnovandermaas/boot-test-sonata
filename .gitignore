@@ -2,4 +2,6 @@ boot.S.o
 boot.cc.o
 boot.elf
 boot.dump
+boot.bin
 cpu0_irom.vhx
+cpu0_irom.vmem
