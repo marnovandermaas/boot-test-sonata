@@ -1,4 +1,5 @@
 boot.S.o
 boot.cc.o
 boot.elf
+boot.dump
 cpu0_irom.vhx
