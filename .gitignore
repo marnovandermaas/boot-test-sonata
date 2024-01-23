@@ -1,0 +1,4 @@
+boot.S.o
+boot.cc.o
+boot.elf
+cpu0_irom.vhx
