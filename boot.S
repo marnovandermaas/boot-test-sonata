@@ -1,10 +1,10 @@
 .include "assembly-helpers.s"
 
-    .section .text, "ax", @progbits
+	.section .text, "ax", @progbits
 .zero 0x80
-    .globl start
-    .p2align 2
-    .type start,@function
+	.globl start
+	.p2align 2
+.type start,@function
 start:
 	// ca0 (first argument) contains the read-write root
 	cspecialr        ca0, mtdc
@@ -13,7 +13,7 @@ start:
 	li               a1, 0x200fe000
 	csetaddr         ca0, ca0, a1
 	li               a1, 0x20100000
-	cjal              zero_memory
+	cjal             zero_memory
 
 	// No bounds on stack, grows down from the end of IRAM
 	li               sp, 0x20080000
@@ -28,7 +28,7 @@ start:
 	cspecialr        ca1, mtdc
 	csetaddr         ca0, ca1, a0
 	li               a1, 0x20080000
-	cjal              zero_memory
+	cjal             zero_memory
 
 	// Jump to the newly loaded binary.
 	// This could be a relative jump, but I'd need to get the relocations right
