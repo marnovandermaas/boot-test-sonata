@@ -4,8 +4,8 @@
 .zero 0x80
 	.globl start
 	.p2align 2
-.type start,@function
-_start:
+    .type start,@function
+start:
 	// ca0 (first argument) contains the read-write root
 	cspecialr        ca0, mtdc
 
