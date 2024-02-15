@@ -10,8 +10,8 @@ cpu0_irom.vhx: boot.elf Makefile
 	hexdump -v -e '"%08X" "\n"' boot.bin > cpu0_irom.vhx
 	srec_cat boot.bin -binary -offset 0x0000 -byte-swap 4 -o cpu0_irom.vmem -vmem
 
-boot.elf: boot.S.o boot.cc.o irom.ldscript Makefile
-	$(LD) --script=irom.ldscript --relax -o boot.elf boot.cc.o boot.S.o
+boot.elf: end.S.o boot.S.o boot.cc.o irom.ldscript Makefile
+	$(LD) --script=irom.ldscript --relax -o boot.elf boot.cc.o boot.S.o end.S.o
 	$(OBJDUMP) -d boot.elf > boot.dump
 
 boot.cc.o: boot.cc Makefile
@@ -20,6 +20,9 @@ boot.cc.o: boot.cc Makefile
 boot.S.o: boot.S
 	$(CXX) -c -target riscv32-unknown-unknown -mcpu=cheriot -mabi=cheriot -mxcheri-rvc -mrelax -fshort-wchar -nostdinc  -I${CHERIOT_RTOS_SDK}/include/c++-config -I${CHERIOT_RTOS_SDK}/include/libc++ -I${CHERIOT_RTOS_SDK}/include -I${CHERIOT_RTOS_SDK}/include/platform/arty-a7 -I${CHERIOT_RTOS_SDK}/include/platform/synopsis -I${CHERIOT_RTOS_SDK}/include/platform/ibex -I${CHERIOT_RTOS_SDK}/include/platform/generic-riscv -DIBEX -DIBEX_SAFE -DCPU_TIMER_HZ=20000000 -o boot.S.o boot.S
 
+end.S.o: end.S
+	$(CXX) -c -target riscv32-unknown-unknown -mcpu=cheriot -mabi=cheriot -mxcheri-rvc -mrelax -fshort-wchar -nostdinc  -I${CHERIOT_RTOS_SDK}/include/c++-config -I${CHERIOT_RTOS_SDK}/include/libc++ -I${CHERIOT_RTOS_SDK}/include -I${CHERIOT_RTOS_SDK}/include/platform/arty-a7 -I${CHERIOT_RTOS_SDK}/include/platform/synopsis -I${CHERIOT_RTOS_SDK}/include/platform/ibex -I${CHERIOT_RTOS_SDK}/include/platform/generic-riscv -DIBEX -DIBEX_SAFE -DCPU_TIMER_HZ=20000000 -o end.S.o end.S
+
 
 clean:
-	rm -f boot.elf boot.S.o boot.cc.o cpu0_irom.vhx boot.dump boot.bin cpu0_irom.vmem
+	rm -f boot.elf boot.S.o boot.cc.o cpu0_irom.vhx boot.dump boot.bin cpu0_irom.vmem end.S.o

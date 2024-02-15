@@ -5,3 +5,4 @@ boot.dump
 boot.bin
 cpu0_irom.vhx
 cpu0_irom.vmem
+end.S.o
