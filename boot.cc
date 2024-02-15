@@ -7,7 +7,7 @@
 
 using namespace CHERI;
 
-#define GPIO_VALUE (0xF)
+#define GPIO_VALUE (0xFFFFFFFF)
 
 //Capability<volatile uint32_t> stored_pointer;
 
