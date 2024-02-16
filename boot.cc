@@ -32,10 +32,10 @@ extern "C" uint32_t rom_loader_entry(void *rwRoot)
 	uint32_t switchValue = 0;
 	while (true) {
 		gpioValue ^= GPIO_VALUE;
-		switchValue = *((volatile uint32_t *) gpi);
-		switchValue <<= 4; // shift input onto LEDs and skipping LCD pins
 		for (int i = 0; i < 1000000; i++) {
-			*((volatile uint32_t *) gpo) = gpioValue | switchValue;
+			switchValue = *((volatile uint32_t *) gpi);
+			switchValue <<= 4; // shift input onto LEDs and skipping LCD pins
+			*((volatile uint32_t *) gpo) = gpioValue ^ switchValue;
 		}
 	}
 }
