@@ -9,8 +9,6 @@ using namespace CHERI;
 
 #define GPIO_VALUE (0xFFFFFFFF)
 
-//Capability<volatile uint32_t> stored_pointer;
-
 /**
  * C++ entry point for the loader.  This is called from assembly, with the
  * read-write root in the first argument.
@@ -18,16 +16,25 @@ using namespace CHERI;
 extern "C" uint32_t rom_loader_entry(void *rwRoot)
 {
 	Capability<void> root{rwRoot};
-	Capability<volatile uint32_t> gpio = root.cast<volatile uint32_t>();
-	gpio.address() = 0x80000000;
-	gpio.bounds() = sizeof(uint32_t);
 
-    uint32_t gpio_value = 0;
-    //stored_pointer = gpio.cast<volatile uint32_t>();
+	// Capability to general purpose output
+	Capability<volatile uint32_t> gpo = root.cast<volatile uint32_t>();
+	gpo.address() = 0x80000000;
+	gpo.bounds() = sizeof(uint32_t);
+
+	// Capability to general purpose input
+	Capability<volatile uint32_t> gpi = root.cast<volatile uint32_t>();
+	gpi.address() = 0x80000004;
+	gpi.bounds() = sizeof(uint32_t);
+
+	// Use pointer to flash LEDs
+	uint32_t gpioValue = 0;
+	uint32_t switchValue = 0;
 	while (true) {
-        gpio_value ^= GPIO_VALUE;
-        for (int i = 0; i < 1000000; i++) {
-		    *((volatile uint32_t *) gpio) = gpio_value;
-        }
+		gpioValue ^= GPIO_VALUE;
+		switchValue = *((volatile uint32_t *) gpi);
+		for (int i = 0; i < 1000000; i++) {
+			*((volatile uint32_t *) gpo) = gpioValue | switchValue;
+		}
 	}
 }
