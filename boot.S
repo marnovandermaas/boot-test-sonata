@@ -22,6 +22,9 @@ start:
 	// Call the C++ entry point
 	la_abs           t0, rom_loader_entry
 	csetaddr         cra, cra, t0
+	csc              cra, 0(csp)
+	clc              cra, 0(csp)
+	csc              cnull, 0(csp)
 	cjalr            cra
 
 	// Zero all of the memory that we haven't loaded into.
